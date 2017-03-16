@@ -1,11 +1,8 @@
-module MThread
+module MThread --middle part, analizing messages and traffic
 ( mThread
 ) where
-    
---import Control.Concurrent
+
 import Control.Concurrent.Chan
---import Network.Simple.TCP
---import Control.Exception
 import Data.ByteString hiding (putStrLn, putStr)
 import Control.Monad
 

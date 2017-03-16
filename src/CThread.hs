@@ -1,4 +1,4 @@
-module CThread
+module CThread --client part, connecting somewere
 ( cThread
 ) where
     
