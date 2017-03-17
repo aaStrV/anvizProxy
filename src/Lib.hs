@@ -6,3 +6,4 @@ import Data.ByteString hiding (putStrLn)
 
 data Message = Request (Maybe ByteString)
              | Responce (Maybe ByteString)
+             | Timeout
