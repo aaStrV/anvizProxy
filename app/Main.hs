@@ -3,6 +3,7 @@ module Main where
 import System.Environment
 import Control.Concurrent
 import Control.Concurrent.Chan
+import System.Exit
 
 import Lib(Message(..))
 import CThread
@@ -11,9 +12,26 @@ import SThread
 
 main :: IO ()
 main = do
-    [h,dp,sp] <- getArgs --host, destport, srcport, prog_to_run
+    checkArgs
+    [h,dp,sp,prog] <- getArgs --host, destport, srcport, prog_to_run
     chan <- newChan
     _ <- forkIO $ cThread h dp chan
     _ <- forkIO $ sThread sp chan
-    mThread chan
-    print "Main: Bye-bye"
+    mThread chan prog
+    print "Main: something goes wrong. Bye-bye"
+
+checkArgs = do
+    progName <- getProgName
+    args <- getArgs
+    if "help" `elem` args
+        then do
+            printHelp progName
+            exitSuccess
+        else return ()
+    if length args /= 4
+       then do
+            printHelp progName
+            exitFailure
+       else return ()
+
+printHelp pn = putStrLn $ "Usage:    "++pn++" dst_host dst_port src_port prog_to_run"

@@ -8,19 +8,20 @@ import Control.Monad
 
 import Lib(Message(..))
 
-mThread chan = do
-    mBody chan --`finally` do
+mThread chan p = do
+    mBody chan p --`finally` do
         --putStrLn $ "Restarting middle server"
         --mThread chan
 
-mBody chan = do
-    --m <- dupChan chan
+mBody chan p = do
     forever $ do
         msg <- readChan chan
         case msg of
-             Request (Just message)     -> print "ok"
+             Request (Just message)     -> do
+                 putStr "Middle(mBoby): Request "
+                 print message
              Responce (Just message)    -> do
-                 putStr "Middle(mBoby): "
+                 putStr "Middle(mBoby): Responce "
                  print message
              Responce Nothing           -> print "Got Nothing message :/"
              _                          -> print "Unknown message receaved"
