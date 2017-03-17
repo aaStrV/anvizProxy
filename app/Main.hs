@@ -31,7 +31,7 @@ checkArgs = do
     if length args /= 4
        then do
             printHelp progName
-            exitFailure
+            die "Wrong number of arguments"
        else return ()
 
 printHelp pn = putStrLn $ "Usage:    "++pn++" dst_host dst_port src_port prog_to_run"
