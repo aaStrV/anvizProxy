@@ -1,6 +1,15 @@
-anvizIP         = "192.168.0.247"
-anvizPort       = "5010"
-listenPort      = "5010"
-extPath         = "./script.sh"
-usersAnviz      = [2,8]
-usersSerial     = []
+anviz:
+    anviz_ip: "192.168.2.225"
+    anviz_port: "44444"
+    anviz_users: [2, 8]
+
+serial:
+    serial_port: "/dev/ttyUSB0"
+    serial_users: []
+
+server:
+    server_eth: "any"
+    server_port: "5010"
+
+actions:
+    run: "./script.sh"
