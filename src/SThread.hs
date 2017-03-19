@@ -24,14 +24,14 @@ sRead connectionSocket chan t = do
          Nothing    -> do
              putStrLn $ "Server(sRead): got Nothing packet"
              killThread t
-         _          -> do
+         Just a     -> do
              writeChan chan $ Request a
              sRead connectionSocket chan t
 
 sReadChan chan connectionSocket = do
     m <- readChan chan
     case m of
-        Responce (Just a) -> do
+        Responce a -> do
             --putStr $ "Server(sReadChan): "
             --print a
             send connectionSocket a

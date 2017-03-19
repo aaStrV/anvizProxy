@@ -4,5 +4,5 @@ module Lib
 
 import Data.ByteString hiding (putStrLn)
 
-data Message = Request (Maybe ByteString)
-             | Responce (Maybe ByteString)
+data Message = Request ByteString
+             | Responce ByteString

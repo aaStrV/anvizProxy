@@ -17,13 +17,12 @@ mBody chan p = do
     forever $ do
         msg <- readChan chan
         case msg of
-             Request (Just message)     -> do
+             Request message     -> do
                  putStr "Middle(mBoby): Request "
                  print message
-             Responce (Just message)    -> do
+             Responce message    -> do
                  putStr "Middle(mBoby): Responce "
                  print message
-             Responce Nothing           -> print "Got Nothing message :/"
-             _                          -> print "Unknown message receaved"
+             --_                          -> print "Unknown message receaved"
 
 analizeReq m = m

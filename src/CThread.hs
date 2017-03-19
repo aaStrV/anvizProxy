@@ -36,12 +36,12 @@ cBody h dp chan = do
         cRead connectionSocket chan t tmsend tmreceave
 
 cRead connectionSocket chan t tmsend tmreceave = do
-    a <- recv connectionSocket 410
-    case a of
+    m <- recv connectionSocket 410
+    case m of
          Nothing    -> do
              putStrLn $ "Client(cRead): got Nothing packet"
              killThread t
-         _          -> do
+         Just a     -> do
              writeChan chan $ Responce a
              oneShotRestart tmsend
              oneShotRestart tmreceave
@@ -50,7 +50,7 @@ cRead connectionSocket chan t tmsend tmreceave = do
 cReadChan chan connectionSocket = do
     m <- readChan chan
     case m of
-        Request (Just a) -> do
+        Request a -> do
             --putStr $ "Client(cReadChan): "
             --print a
             send connectionSocket a
