@@ -1,0 +1,6 @@
+anvizIP         = "192.168.0.247"
+anvizPort       = "5010"
+listenPort      = "5010"
+extPath         = "./script.sh"
+usersAnviz      = [2,8]
+usersSerial     = []

@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Lib, CThread, MThread, SThread
-  build-depends:       base >= 4.7 && < 5, bytestring >= 0.10, network-simple >= 0.4, network >= 2.6, timers >= 0.2, suspend >= 0.2, process
+  build-depends:       base >= 4.7 && < 5, bytestring >= 0.10, network-simple >= 0.4, network >= 2.6, timers >= 0.2, suspend >= 0.2, process, yaml
   default-language:    Haskell2010
 
 executable anvizProxy
@@ -24,7 +24,7 @@ executable anvizProxy
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , anvizProxy, bytestring, network-simple, network
+                     , anvizProxy, bytestring, network-simple, network, yaml
   default-language:    Haskell2010
 
 test-suite anvizProxy-test
@@ -32,7 +32,7 @@ test-suite anvizProxy-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , anvizProxy, bytestring, network-simple, network
+                     , anvizProxy, bytestring, network-simple, network, yaml
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 

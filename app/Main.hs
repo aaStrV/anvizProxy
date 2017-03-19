@@ -4,6 +4,7 @@ import System.Environment
 import Control.Concurrent
 import Control.Concurrent.Chan
 import System.Exit
+import Data.Yaml
 
 import Lib(Message(..))
 import CThread
