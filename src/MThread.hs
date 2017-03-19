@@ -25,3 +25,5 @@ mBody chan p = do
                  print message
              Responce Nothing           -> print "Got Nothing message :/"
              _                          -> print "Unknown message receaved"
+
+analizeReq m = m

@@ -1,6 +1,5 @@
 module CThread --client part, connecting somewere
 (cThread,
-reqRecInf
 ) where
     
 import Control.Concurrent
