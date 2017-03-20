@@ -11,9 +11,11 @@ module Lib
 import Data.ByteString hiding (putStrLn)
 import Data.Yaml
 import Control.Applicative
+import GHC.Word
 
 data Message = Request ByteString
              | Responce ByteString
+             | Serial ByteString
 
 data Config = Config    { anviz :: AnvizConfig
                         , serial :: SerialConfig
@@ -32,7 +34,7 @@ instance FromJSON Config where
 data AnvizConfig = AnvizConfig {
     anviz_ip :: String,
     anviz_port :: String,
-    anviz_users :: [Int]
+    anviz_users :: [[Word8]]
 } deriving Show
 
 instance FromJSON AnvizConfig where

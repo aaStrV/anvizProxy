@@ -11,7 +11,7 @@ import Network.Simple.TCP
 import Lib(Message(..))
 
 sThread sp chan = serve (HostAny) sp $ \(connectionSocket, remoteAddr) -> do
-        putStrLn $ "Server(sThread): TCP connection established from " ++ show remoteAddr
+        --putStrLn $ "Server(sThread): TCP connection established from " ++ show remoteAddr
         t <- forkIO $ do
             c <- dupChan chan
             sReadChan c connectionSocket
@@ -22,7 +22,7 @@ sRead connectionSocket chan t = do
     a <- recv connectionSocket 410
     case a of
          Nothing    -> do
-             putStrLn $ "Server(sRead): got Nothing packet"
+             --putStrLn $ "Server(sRead): got Nothing packet"
              killThread t
          Just a     -> do
              writeChan chan $ Request a

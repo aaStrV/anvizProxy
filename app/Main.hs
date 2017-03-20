@@ -26,16 +26,19 @@ main = do
     let
         h = anviz_ip $ anviz c
         dp = anviz_port $ anviz c
+        uss = anviz_users $ anviz c
         sp = server_port $ server c
         prun = run $ actions c
     putStrLn $ "Host: "++h
     putStrLn $ "DPort: "++dp
     putStrLn $ "SPort: "++sp
     putStrLn $ "Run script: "++prun
+    putStr "User id's: "
+    print uss
     chan <- newChan
     _ <- forkIO $ cThread h dp chan
     _ <- forkIO $ sThread sp chan
-    mThread chan prun
+    mThread chan uss prun
     print "Main: something goes wrong. Bye-bye"
 
 checkArgs = do
