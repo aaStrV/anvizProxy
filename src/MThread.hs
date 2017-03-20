@@ -39,4 +39,4 @@ analizeResp [] = False
 analizeResp (0xa5:_:_:_:_:0xdf:0x00:0x00:0x0e:0x00:0x00:0x00:0x00:0x08:xs) = True
 analizeResp _ = False
 
---checkResp :: [a] -> [a]
+--checkRespCS :: [a] -> [a]

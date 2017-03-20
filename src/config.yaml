@@ -8,7 +8,7 @@ serial:
     serial_users: []
 
 server:
-    server_eth: "any"
+    server_eth: "any" #"192.168.1.2", or "any"
     server_port: "5010"
 
 actions:

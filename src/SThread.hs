@@ -33,7 +33,7 @@ sReadChan chan connectionSocket = do
     case m of
         Responce a -> do
             --putStr $ "Server(sReadChan): "
-            --print a
+            --putStrLn a
             send connectionSocket a
         _           -> return ()
     sReadChan chan connectionSocket

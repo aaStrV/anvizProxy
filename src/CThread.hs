@@ -52,7 +52,7 @@ cReadChan chan connectionSocket = do
     case m of
         Request a -> do
             --putStr $ "Client(cReadChan): "
-            --print a
+            --putStrLn a
             send connectionSocket a
         _           -> return ()
     cReadChan chan connectionSocket
