@@ -40,17 +40,13 @@ mThread chan uss suss p = do
 analizeResp :: [Word8] -> [[Word8]] -> Bool
 analizeResp [] _ = False
 analizeResp _ [] = False
-analizeResp (0xa5:idhh:idhl:idlh:idll:0xdf:0x00:0x00:0x0e:xs) (us:uss)
-  | take 5 xs == us   = True
-  | otherwise         = analizeResp (0xa5:idhh:idhl:idlh:idll:0xdf:0x00:0x00:0x0e:xs) uss
+analizeResp (0xa5:_:_:_:_:0xdf:0x00:0x00:0x0e:xs) uss = take 5 xs `elem` uss
 analizeResp _ _ = False
 
 analizeSerial :: [String] -> String -> Bool
 analizeSerial _ "" = False
 analizeSerial [] _ = False
-analizeSerial (x:xs) a
-  | x==a      = True
-  | otherwise = analizeSerial xs a
+analizeSerial xs a = a `elem` xs
 
 runExt :: String -> IO ()
 runExt p = do
