@@ -31,19 +31,22 @@ main = do
     uss = anviz_users $ anviz c
     sp = server_port $ server c
     com = serial_port $ serial c
+    suss = serial_users $ serial c
     prun = run $ actions c
   putStrLn $ "Host: "++h
   putStrLn $ "DPort: "++dp
   putStrLn $ "SPort: "++sp
   putStrLn $ "Run script: "++prun
   putStrLn $ "Serial port: "++com
-  putStr "User id's: "
+  putStr "Anviz user id's: "
   print uss
+  putStr "Serial user id's: "
+  print suss
   chan <- newChan
   _ <- forkIO $ cThread h dp chan
   _ <- forkIO $ sThread sp chan
   _ <- forkIO $ serialThread com chan
-  mThread chan uss prun
+  mThread chan uss suss prun
   print "Main: something goes wrong. Bye-bye"
 
 checkArgs = do

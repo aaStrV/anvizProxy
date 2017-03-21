@@ -5,7 +5,7 @@ anviz:
 
 serial:
     serial_port:    "/dev/ttyUSB0"
-    serial_users:   []
+    serial_users:   ["a34", "b48"]
 
 server:
     server_eth:     "any" #"192.168.1.2", or "any" #not yet realized

@@ -11,12 +11,6 @@ import Control.Concurrent hiding(yield)
 import Control.Exception
 import System.IO.Error
 import Control.Monad (forever)
-{-
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as B
-import Pipes
-import qualified Pipes.Prelude as P
--}
 
 import Lib(Message(..))
 
@@ -24,50 +18,31 @@ serialThread :: String -> Chan Message -> IO ()
 serialThread p c = do
   if p=="" 
     then do
-      putStrLn $ "Serial(serialThread): serial thread exits"
+      putStrLn $ "Serial(serialThread): empty port, serial thread done"
     else do
-      serialThread' p c
+      serialConNow p c
 
-serialThread' p c = do
-  serialBody p c `catch` (\e -> do
+serialConNow p c = do
+  serialConnect p c `catch` (\e -> do
     if isEOFError e
-       then putStrLn $ "Serial(serialBody): got EOFError"
-       else return ()
-    if isDoesNotExistError e
-       then putStrLn $ "Serial(serialBody): got DoesNotExistError"
-       else return ()
-    putStrLn ("Caught " ++ show (e :: IOException))
-    threadDelay 200000
-    serialThread' p c)
+      then do
+        putStrLn $ "Serial(serialConnect): got EOFError, reconnecting now"
+        serialConNow p c
+      else do
+        putStrLn $ "Serial(serialConnect): got some exception, will reconnect after timeout"
+        threadDelay 5000000
+        putStrLn $ "Serial(serialConnect): reconnecting"
+        serialConNow p c )
                
-serialBody p c = do
-  --{-
+serialConnect p c = do
   h <- hOpenSerial p defaultSerialSettings  { commSpeed = CS9600
                                             , timeout   = 100}
-  ---}
-  --s <- openSerial p defaultSerialSettings  { commSpeed = CS9600 }
-  putStrLn $ "Serial(serialBody): port "++p++" opened"
-  forever $ do
-    l <- hGetLine h
-    --l <- recvLn s
-    putStr "Serial(serialBody): "
-    print l
-    --{-
-    case l of
-      ""   -> return ()
-      a    -> writeChan c $ Serial a
-    ---}
-    {-
-    let ls = B.unpack l
-    case ls of
-      ""   -> return ()
-      a    -> writeChan c $ Serial a
-    -}
-{-
-ioGenerator :: IO a -> Producer a IO ()
-ioGenerator gen = forever $ lift gen >>= yield
+  putStrLn $ "Serial(serialConnect): port "++p++" opened"
+  serialRead h c
 
-recvLn :: SerialPort -> IO ByteString
-recvLn s = P.fold B.append "" id stream
-  where stream = ioGenerator (recv s 1) >-> P.takeWhile (/= "\n")
--}
+serialRead :: Handle -> Chan Message -> IO ()
+serialRead h c = forever $ do
+  l <- hGetLine h
+  case l of
+    ""   -> return ()
+    a    -> writeChan c $ Serial a

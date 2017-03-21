@@ -10,7 +10,7 @@ import            GHC.Word
 
 import            Lib                     (Message(..))
 
-mThread chan uss p = do
+mThread chan uss suss p = do
   forever $ do
     msg <- readChan chan
     case msg of
@@ -31,6 +31,11 @@ mThread chan uss p = do
       Serial message      -> do
         putStr "Middle(mBoby): Serial "
         print message
+        if analizeSerial suss message
+          then do
+            --putStrLn "Middle(mBoby): Alarm!"
+            runExt p
+          else return ()
 
 analizeResp :: [Word8] -> [[Word8]] -> Bool
 analizeResp [] _ = False
@@ -39,6 +44,13 @@ analizeResp (0xa5:idhh:idhl:idlh:idll:0xdf:0x00:0x00:0x0e:xs) (us:uss)
   | take 5 xs == us   = True
   | otherwise         = analizeResp (0xa5:idhh:idhl:idlh:idll:0xdf:0x00:0x00:0x0e:xs) uss
 analizeResp _ _ = False
+
+analizeSerial :: [String] -> String -> Bool
+analizeSerial _ "" = False
+analizeSerial [] _ = False
+analizeSerial (x:xs) a
+  | x==a      = True
+  | otherwise = analizeSerial xs a
 
 runExt :: String -> IO ()
 runExt p = do
