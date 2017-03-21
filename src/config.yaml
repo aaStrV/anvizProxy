@@ -1,15 +1,15 @@
 anviz:
-    anviz_ip: "192.168.0.247"
-    anviz_port: "5010"
-    anviz_users: [[0,0,0,0,1], [0,0,0,0,8]]
+    anviz_ip:       "192.168.0.247"
+    anviz_port:     "5010"
+    anviz_users:    [[0,0,0,0,1], [0,0,0,0,8]]
 
 serial:
-    serial_port: "/dev/ttyUSB0"
-    serial_users: []
+    serial_port:    "/dev/ttyUSB0"
+    serial_users:   []
 
 server:
-    server_eth: "any" #"192.168.1.2", or "any" #not yet realized
-    server_port: "5010"
+    server_eth:     "any" #"192.168.1.2", or "any" #not yet realized
+    server_port:    "5010"
 
 actions:
-    run: "sh ./script.sh"
+    run:            "sh ./script.sh"
