@@ -28,7 +28,9 @@ mThread chan uss p = do
             --putStrLn "Middle(mBoby): Alarm!"
             runExt p
           else return ()
-      Serial message      -> return ()
+      Serial message      -> do
+        putStr "Middle(mBoby): Serial "
+        print message
 
 analizeResp :: [Word8] -> [[Word8]] -> Bool
 analizeResp [] _ = False

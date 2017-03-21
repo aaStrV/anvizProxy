@@ -14,7 +14,7 @@ import              GHC.Word
 
 data Message = Request ByteString
              | Responce ByteString
-             | Serial ByteString
+             | Serial String
 
 data Config = Config    { anviz :: AnvizConfig
                         , serial :: SerialConfig
