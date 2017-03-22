@@ -16,17 +16,17 @@ mThread chan uss suss p = do
     msg <- readChan chan
     case msg of
       Request message     -> do
-        noticeM lcom $ "Middle(mBoby): Request " ++ (show message)
+        infoM lcom $ "Middle(mBoby): Request " ++ (show message)
       Responce message    -> do
         let m = B.unpack message
-        noticeM lcom $ "Middle(mBoby): Responce " ++ (show message)
+        infoM lcom $ "Middle(mBoby): Responce " ++ (show message)
         if analizeResp m uss
           then do
             warningM lcom $ "Middle(mBoby): Alarm!"
             runExt p
           else return ()
       Serial message      -> do
-        noticeM lcom $ "Middle(mBoby): Serial " ++ (show message)
+        infoM lcom $ "Middle(mBoby): Serial " ++ (show message)
         if analizeSerial suss message
           then do
             warningM lcom $ "Middle(mBoby): Alarm!"
