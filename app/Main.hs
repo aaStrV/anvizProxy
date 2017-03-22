@@ -105,7 +105,8 @@ checkArgs = do
       die "Wrong number of arguments"
     else return ()
 
-printHelp pn = noticeM lcom $ "Usage:    "++pn++" <path to config.yaml>"
+printHelp pn = do
+  putStrLn $ "Usage:    "++pn++" <path to config.yaml>"
 
 readMyConfig :: String -> IO Config
 readMyConfig path =
