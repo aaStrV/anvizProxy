@@ -61,7 +61,7 @@ cReadChan chan connectionSocket = do
 
 cStartWaitResp :: ThreadId -> Socket -> IO()
 cStartWaitResp t connectionSocket = do
-  warningM lcom "Client(cBody): last request was too long ago. Sending 'Get record information'"
+  noticeM lcom "Client(cBody): last request was too long ago. Sending 'Get record information'"
   send connectionSocket reqRecInf
   --Data: a5000000023000002729 - Get the information of T&A device 1
   --Resp: a5:00:f6:46:eb:b0:00:00:12:30:35:2e:31:38:2e:41:31:6f:43:2f:0a:00:02:10:00:00:02:1d:aa

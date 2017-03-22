@@ -89,13 +89,15 @@ instance FromJSON ActionsConfig where
 
 data LoggerConfig = LoggerConfig {
   logger_path   :: String,
-  logger_level  :: Priority
+  logger_level  :: Priority,
+  logger_format  :: String
 } deriving Show
 
 instance FromJSON LoggerConfig where
   parseJSON (Object m) = LoggerConfig <$>
     m .: "logger_path" <*>
-    m .: "logger_level"
+    m .: "logger_level" <*>
+    m .: "logger_format"
   parseJSON x = fail ("not an object: " ++ show x) 
 
 instance FromJSON Priority where

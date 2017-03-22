@@ -25,8 +25,8 @@ import              MThread
 import              SThread
 import              SerialThread
 
-setCommonFormatter x =
-  let f = simpleLogFormatter "$utcTime ($prio) $msg" in
+setCommonFormatter x form =
+  let f = simpleLogFormatter form in
   setFormatter x f
 
 main :: IO ()
@@ -47,9 +47,10 @@ main = do
     startSerial = serial_enable $ serial c
     lp = logger_path $ logger c
     ll = logger_level $ logger c
+    lf = logger_format $ logger c
 
   fh <- fileHandler lp DEBUG
-  let fh' = setCommonFormatter fh
+  let fh' = setCommonFormatter fh lf
   removeAllHandlers
   updateGlobalLogger lcom $ addHandler fh'
   updateGlobalLogger lcom (setLevel ll)
