@@ -6,25 +6,34 @@ import              Control.Concurrent.Chan
 import              System.Exit
 import              Data.Yaml
 import              Control.Applicative
---import              System.Log.Logger
+import              System.Log.Logger
+import              System.Log.Handler.Simple
+import              System.Log.Handler (setFormatter)
+import              System.Log.Formatter
+--import              System.IO
 
 import              Lib                         (Message(..)
                                                 ,Config(..)
                                                 ,AnvizConfig(..)
                                                 ,SerialConfig(..)
                                                 ,ServerConfig(..)
-                                                ,ActionsConfig(..))
+                                                ,ActionsConfig(..)
+                                                ,LoggerConfig(..)
+                                                ,lcom)
 import              CThread
 import              MThread
 import              SThread
 import              SerialThread
+
+setCommonFormatter x =
+  let f = simpleLogFormatter "$utcTime ($prio) $msg" in
+  setFormatter x f
 
 main :: IO ()
 main = do
   checkArgs
   [cpath] <- getArgs --path to config file
   c <- readMyConfig cpath
-  --print c
   let
     h = anviz_ip $ anviz c
     dp = anviz_port $ anviz c
@@ -36,45 +45,51 @@ main = do
     startAnviz = anviz_enable $ anviz c
     startServer = server_enable $ server c
     startSerial = serial_enable $ serial c
-  {-
-  putStrLn $ "Host: "++h
-  putStrLn $ "DPort: "++dp
-  putStrLn $ "SPort: "++sp
-  putStrLn $ "Run script: "++prun
-  putStrLn $ "Serial port: "++com
-  putStr "Anviz user id's: "
-  print uss
-  putStr "Serial user id's: "
-  print suss
-  -}
+    lp = logger_path $ logger c
+    ll = logger_level $ logger c
+
+  fh <- fileHandler lp DEBUG
+  let fh' = setCommonFormatter fh
+  removeAllHandlers
+  updateGlobalLogger lcom $ addHandler fh'
+  updateGlobalLogger lcom (setLevel ll)
+  
+  noticeM lcom $ "Host: "++h
+  noticeM lcom $ "DPort: "++dp
+  noticeM lcom $ "SPort: "++sp
+  noticeM lcom $ "Run script: "++prun
+  noticeM lcom $ "Serial port: "++com
+  noticeM lcom $ "Anviz user id's: " ++ (show uss)
+  noticeM lcom $ "Serial user id's: " ++ (show suss)
+  
   chan <- newChan
   if startAnviz
     then do
       _ <- forkIO $ cThread h dp chan
-      putStrLn $ "Main: anviz client started"
+      noticeM lcom $ "Main: anviz client started"
       return ()
     else do
       return ()
   if startServer
     then do
       _ <- forkIO $ sThread sp chan
-      putStrLn $ "Main: server started"
+      noticeM lcom $ "Main: server started"
       return ()
     else do
       return ()
   if startSerial
     then do
       _ <- forkIO $ serialThread com chan
-      putStrLn $ "Main: serial started"
+      noticeM lcom $ "Main: serial started"
       return ()
     else do
       return ()
   if not (startAnviz || startServer || startSerial)
     then do
-      putStrLn "Main: Nothing to do, check config"
+      noticeM lcom "Main: Nothing to do, check config"
     else do
       mThread chan uss suss prun
-  putStrLn "Main: something goes wrong. Bye-bye"
+  noticeM lcom "Main: something goes wrong. Bye-bye"
 
 checkArgs = do
   progName <- getProgName
@@ -90,7 +105,7 @@ checkArgs = do
       die "Wrong number of arguments"
     else return ()
 
-printHelp pn = putStrLn $ "Usage:    "++pn++" <path to config.yaml>"
+printHelp pn = noticeM lcom $ "Usage:    "++pn++" <path to config.yaml>"
 
 readMyConfig :: String -> IO Config
 readMyConfig path =

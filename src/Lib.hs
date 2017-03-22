@@ -5,12 +5,15 @@ module              Lib                     ( Message(..)
                                             , SerialConfig(..)
                                             , ServerConfig(..)
                                             , ActionsConfig(..)
+                                            , LoggerConfig(..)
+                                            , lcom
                                             ) where
 
 import              Data.ByteString         as B
 import              Data.Yaml
 import              Control.Applicative
 import              GHC.Word
+import              System.Log.Logger
 
 data Message = Request ByteString
              | Responce ByteString
@@ -20,14 +23,18 @@ data Config = Config    { anviz :: AnvizConfig
                         , serial :: SerialConfig
                         , server :: ServerConfig
                         , actions :: ActionsConfig
+                        , logger :: LoggerConfig
                         } deriving Show
+
+lcom = "Logger.Main"
 
 instance FromJSON Config where
   parseJSON (Object m) = Config <$>
     m .: "anviz" <*>
     m .: "serial" <*>
     m .: "server" <*>
-    m .: "actions"
+    m .: "actions" <*>
+    m .: "logger"
   parseJSON x = fail ("not an object: " ++ show x) 
 
 data AnvizConfig = AnvizConfig {
@@ -46,8 +53,8 @@ instance FromJSON AnvizConfig where
   parseJSON x = fail ("not an object: " ++ show x) 
 
 data SerialConfig = SerialConfig {
-  serial_port :: String,
-  serial_users :: [String],
+  serial_port   :: String,
+  serial_users  :: [String],
   serial_enable :: Bool
 } deriving Show
 
@@ -59,8 +66,8 @@ instance FromJSON SerialConfig where
   parseJSON x = fail ("not an object: " ++ show x) 
 
 data ServerConfig = ServerConfig {
-  server_eth :: String,
-  server_port :: String,
+  server_eth    :: String,
+  server_port   :: String,
   server_enable :: Bool
 } deriving Show
 
@@ -79,3 +86,26 @@ instance FromJSON ActionsConfig where
   parseJSON (Object m) = ActionsConfig <$>
     m .: "run"
   parseJSON x = fail ("not an object: " ++ show x) 
+
+data LoggerConfig = LoggerConfig {
+  logger_path   :: String,
+  logger_level  :: Priority
+} deriving Show
+
+instance FromJSON LoggerConfig where
+  parseJSON (Object m) = LoggerConfig <$>
+    m .: "logger_path" <*>
+    m .: "logger_level"
+  parseJSON x = fail ("not an object: " ++ show x) 
+
+instance FromJSON Priority where
+  parseJSON s = case s of
+    "DEBUG"     -> pure DEBUG
+    "INFO"      -> pure INFO
+    "NOTICE"    -> pure NOTICE
+    "WARNING"   -> pure WARNING
+    "ERROR"     -> pure ERROR
+    "CRITICAL"  -> pure CRITICAL
+    "ALERT"     -> pure ALERT
+    "EMERGENCY" -> pure EMERGENCY
+    _           -> fail ("wrong loglevel: " ++ show s)

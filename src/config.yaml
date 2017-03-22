@@ -16,3 +16,7 @@ server:
 
 actions:
     run:            "sh ./script.sh"
+
+logger:
+    logger_path:     "./anvizProxy.log"
+    logger_level:    DEBUG

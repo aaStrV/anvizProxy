@@ -6,4 +6,5 @@ extra-deps:
 - serialport-0.4.7
 - suspend-0.2.0.0
 - timers-0.2.0.3
+- hslogger-1.2.10
 resolver: lts-8.5

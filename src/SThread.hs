@@ -6,23 +6,22 @@ import            Control.Concurrent
 import            Control.Concurrent.Chan
 import qualified  Data.ByteString         as B
 import            Network.Simple.TCP
---import            Control.Monad
+import            System.Log.Logger
 
-import            Lib                     (Message(..))
+import            Lib                     (Message(..), lcom)
 
 sThread sp chan = serve (HostAny) sp $ \(connectionSocket, remoteAddr) -> do
-  --putStrLn $ "Server(sThread): TCP connection established from " ++ show remoteAddr
+  noticeM lcom $ "Server(sThread): TCP connection established from " ++ (show remoteAddr)
   t <- forkIO $ do
     c <- dupChan chan
     sReadChan c connectionSocket
   sRead connectionSocket chan t
 
 sRead connectionSocket chan t = do
-  --TODO: start chan listener
   a <- recv connectionSocket 410
   case a of
     Nothing    -> do
-      --putStrLn $ "Server(sRead): got Nothing packet"
+      warningM lcom $ "Server(sRead): got Nothing packet"
       killThread t
     Just a     -> do
       writeChan chan $ Request a
@@ -32,8 +31,7 @@ sReadChan chan connectionSocket = do
   m <- readChan chan
   case m of
     Responce a  -> do
-      --putStr $ "Server(sReadChan): "
-      --putStrLn a
+      noticeM lcom $ "Server(sReadChan): " ++ (show a)
       send connectionSocket a
     _           -> return ()
   sReadChan chan connectionSocket

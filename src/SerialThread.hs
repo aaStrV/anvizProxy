@@ -3,22 +3,22 @@ module SerialThread --serial part, reads from COM-port, sending messages to chan
 ( serialThread
 ) where
 
-import System.IO
-import System.Hardware.Serialport --hiding (recv)
---import Control.Monad
-import Control.Concurrent.Chan
-import Control.Concurrent hiding(yield)
-import Control.Exception
-import System.IO.Error
-import Control.Monad (forever)
+import            System.IO
+import            System.Hardware.Serialport                --hiding (recv)
+import            Control.Concurrent.Chan
+import            Control.Concurrent          hiding(yield)
+import            Control.Exception
+import            System.IO.Error
+import            Control.Monad               (forever)
+import            System.Log.Logger
 
-import Lib(Message(..))
+import Lib(Message(..), lcom)
 
 serialThread :: String -> Chan Message -> IO ()
 serialThread p c = do
   if p=="" 
     then do
-      putStrLn $ "Serial(serialThread): empty port, serial thread done"
+      warningM lcom $ "Serial(serialThread): empty port, serial thread done"
     else do
       serialConNow p c
 
@@ -26,18 +26,18 @@ serialConNow p c = do
   serialConnect p c `catch` (\e -> do
     if isEOFError e
       then do
-        --putStrLn $ "Serial(serialConnect): got EOFError, reconnecting now"
+        noticeM lcom $ "Serial(serialConnect): got EOFError, reconnecting now"
         serialConNow p c
       else do
-        --putStrLn $ "Serial(serialConnect): got some exception, will reconnect after timeout"
+        noticeM lcom $ "Serial(serialConnect): got some exception, will reconnect after timeout"
         threadDelay 5000000
-        --putStrLn $ "Serial(serialConnect): reconnecting"
+        noticeM lcom $ "Serial(serialConnect): reconnecting"
         serialConNow p c )
                
 serialConnect p c = do
   h <- hOpenSerial p defaultSerialSettings  { commSpeed = CS9600
                                             , timeout   = 200}
-  --putStrLn $ "Serial(serialConnect): port "++p++" opened"
+  noticeM lcom $ "Serial(serialConnect): port "++p++" opened"
   serialRead h c
 
 serialRead :: Handle -> Chan Message -> IO ()

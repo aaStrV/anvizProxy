@@ -7,36 +7,40 @@ import qualified  Data.ByteString         as B
 import            Control.Monad
 import            System.Process
 import            GHC.Word
+import            System.Log.Logger
 
-import            Lib                     (Message(..))
+import            Lib                     (Message(..), lcom)
 
 mThread chan uss suss p = do
   forever $ do
     msg <- readChan chan
     case msg of
       Request message     -> do
-        {-putStr "Middle(mBoby): Request "
-        let m = B.unpack message
-        print m-}
-        return ()
+        noticeM lcom $ "Middle(mBoby): Request " ++ (show message)
       Responce message    -> do
         let m = B.unpack message
-        {-putStr "Middle(mBoby): Responce "
-        print m-}
+        noticeM lcom $ "Middle(mBoby): Responce " ++ (show message)
         if analizeResp m uss
           then do
-            --putStrLn "Middle(mBoby): Alarm!"
+            warningM lcom $ "Middle(mBoby): Alarm!"
             runExt p
           else return ()
       Serial message      -> do
-        putStr "Middle(mBoby): Serial "
-        print message
+        noticeM lcom $ "Middle(mBoby): Serial " ++ (show message)
         if analizeSerial suss message
           then do
-            --putStrLn "Middle(mBoby): Alarm!"
+            warningM lcom $ "Middle(mBoby): Alarm!"
             runExt p
           else return ()
 
+runExt :: String -> IO ()
+runExt p = do
+  _ <- createProcess (shell p)
+  return ()
+
+--------------------------------------------------------------------------------
+--Pure part
+--------------------------------------------------------------------------------
 analizeResp :: [Word8] -> [[Word8]] -> Bool
 analizeResp [] _ = False
 analizeResp _ [] = False
@@ -47,8 +51,3 @@ analizeSerial :: [String] -> String -> Bool
 analizeSerial _ "" = False
 analizeSerial [] _ = False
 analizeSerial xs a = a `elem` xs
-
-runExt :: String -> IO ()
-runExt p = do
-  _ <- createProcess (shell p)
-  return ()
