@@ -22,14 +22,14 @@ mThread chan uss suss p = do
         infoM lcom $ "Middle(mBoby): Responce " ++ (show message)
         if analizeResp m uss
           then do
-            warningM lcom $ "Middle(mBoby): Alarm!"
+            alertM lcom $ "Middle(mBoby): Alarm! " ++ (show m)
             runExt p
           else return ()
       Serial message      -> do
         infoM lcom $ "Middle(mBoby): Serial " ++ (show message)
         if analizeSerial suss message
           then do
-            warningM lcom $ "Middle(mBoby): Alarm!"
+            alertM lcom $ "Middle(mBoby): Alarm!" ++ (show message)
             runExt p
           else return ()
 
