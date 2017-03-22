@@ -2,12 +2,12 @@ anviz:
     anviz_ip:       "192.168.0.247"
     anviz_port:     "5010"
     anviz_users:    [[0,0,0,0,1], [0,0,0,0,8]]
-    anviz_enable:   False
+    anviz_enable:   True
 
 serial:
     serial_port:    "/dev/ttyUSB0"
     serial_users:   ["a34", "b48"]
-    serial_enable:   False
+    serial_enable:   True
 
 server:
     server_eth:     "any" #"192.168.1.2", or "any" #not yet realized

@@ -26,18 +26,18 @@ serialConNow p c = do
   serialConnect p c `catch` (\e -> do
     if isEOFError e
       then do
-        putStrLn $ "Serial(serialConnect): got EOFError, reconnecting now"
+        --putStrLn $ "Serial(serialConnect): got EOFError, reconnecting now"
         serialConNow p c
       else do
-        putStrLn $ "Serial(serialConnect): got some exception, will reconnect after timeout"
+        --putStrLn $ "Serial(serialConnect): got some exception, will reconnect after timeout"
         threadDelay 5000000
-        putStrLn $ "Serial(serialConnect): reconnecting"
+        --putStrLn $ "Serial(serialConnect): reconnecting"
         serialConNow p c )
                
 serialConnect p c = do
   h <- hOpenSerial p defaultSerialSettings  { commSpeed = CS9600
-                                            , timeout   = 100}
-  putStrLn $ "Serial(serialConnect): port "++p++" opened"
+                                            , timeout   = 200}
+  --putStrLn $ "Serial(serialConnect): port "++p++" opened"
   serialRead h c
 
 serialRead :: Handle -> Chan Message -> IO ()

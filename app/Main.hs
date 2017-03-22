@@ -90,7 +90,7 @@ checkArgs = do
       die "Wrong number of arguments"
     else return ()
 
-printHelp pn = putStrLn $ "Usage:    "++pn++" path_to_config_yaml"
+printHelp pn = putStrLn $ "Usage:    "++pn++" <path to config.yaml>"
 
 readMyConfig :: String -> IO Config
 readMyConfig path =
