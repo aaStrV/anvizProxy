@@ -33,6 +33,10 @@ main = do
     com = serial_port $ serial c
     suss = serial_users $ serial c
     prun = run $ actions c
+    startAnviz = anviz_enable $ anviz c
+    startServer = server_enable $ server c
+    startSerial = serial_enable $ serial c
+  {-
   putStrLn $ "Host: "++h
   putStrLn $ "DPort: "++dp
   putStrLn $ "SPort: "++sp
@@ -42,12 +46,35 @@ main = do
   print uss
   putStr "Serial user id's: "
   print suss
+  -}
   chan <- newChan
-  _ <- forkIO $ cThread h dp chan
-  _ <- forkIO $ sThread sp chan
-  _ <- forkIO $ serialThread com chan
-  mThread chan uss suss prun
-  print "Main: something goes wrong. Bye-bye"
+  if startAnviz
+    then do
+      _ <- forkIO $ cThread h dp chan
+      putStrLn $ "Main: anviz client started"
+      return ()
+    else do
+      return ()
+  if startServer
+    then do
+      _ <- forkIO $ sThread sp chan
+      putStrLn $ "Main: server started"
+      return ()
+    else do
+      return ()
+  if startSerial
+    then do
+      _ <- forkIO $ serialThread com chan
+      putStrLn $ "Main: serial started"
+      return ()
+    else do
+      return ()
+  if not (startAnviz || startServer || startSerial)
+    then do
+      putStrLn "Main: Nothing to do, check config"
+    else do
+      mThread chan uss suss prun
+  putStrLn "Main: something goes wrong. Bye-bye"
 
 checkArgs = do
   progName <- getProgName
