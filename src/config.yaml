@@ -20,4 +20,5 @@ actions:
 logger:
     logger_path:     ./anvizProxy.log
     logger_level:    DEBUG #DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY
-    logger_format:   "$utcTime ($prio) $msg" #not yet realized
+    #logger_format:   $utcTime ($prio) $msg
+    logger_format:   $utcTime ($prio) $msg
