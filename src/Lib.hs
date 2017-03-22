@@ -15,6 +15,8 @@ import              Control.Applicative
 import              GHC.Word
 import              System.Log.Logger
 
+lcom = "Logger.Main"
+
 data Message = Request ByteString
              | Responce ByteString
              | Serial String
@@ -25,8 +27,6 @@ data Config = Config    { anviz :: AnvizConfig
                         , actions :: ActionsConfig
                         , logger :: LoggerConfig
                         } deriving Show
-
-lcom = "Logger.Main"
 
 instance FromJSON Config where
   parseJSON (Object m) = Config <$>
