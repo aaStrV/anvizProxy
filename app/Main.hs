@@ -55,6 +55,7 @@ main = do
   updateGlobalLogger lcom $ addHandler fh'
   updateGlobalLogger lcom (setLevel ll)
   
+  warningM lcom $ "-----------------------------------------------------------------------------------"
   noticeM lcom $ "Host: "++h
   noticeM lcom $ "DPort: "++dp
   noticeM lcom $ "SPort: "++sp
