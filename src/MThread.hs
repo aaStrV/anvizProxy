@@ -1,4 +1,15 @@
-module MThread --middle part, analizing messages and traffic
+{-|
+Module      : MThread
+Description : Middle thread
+Copyright   : (c) telegatrollej@yandex.ru, 2017
+License     : BSD
+Maintainer  : telegatrollej@yandex
+Stability   : experimental
+Portability : POSIX
+
+Middle part, analizing messages and traffic.
+-}
+module MThread 
 ( mThread
 ) where
 
@@ -16,10 +27,10 @@ mThread chan uss suss p = do
     msg <- readChan chan
     case msg of
       Request message     -> do
-        infoM lcom $ "Middle(mBoby): Request " ++ (show message)
+        infoM lcom $ "Middle(mBoby): Request " ++ (show $ B.unpack message)
       Responce message    -> do
         let m = B.unpack message
-        infoM lcom $ "Middle(mBoby): Responce " ++ (show message)
+        infoM lcom $ "Middle(mBoby): Responce " ++ (show $ B.unpack message)
         if analizeResp m uss
           then do
             alertM lcom $ "Middle(mBoby): Alarm! " ++ (show m)

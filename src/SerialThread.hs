@@ -35,7 +35,7 @@ serialConNow p c = do
         serialConNow p c )
                
 serialConnect p c = do
-  h <- hOpenSerial p defaultSerialSettings  { commSpeed = CS9600
+  h <- hOpenSerial p defaultSerialSettings  { commSpeed = CS115200
                                             , timeout   = 200}
   noticeM lcom $ "Serial(serialConnect): port "++p++" opened"
   serialRead h c
@@ -43,6 +43,8 @@ serialConnect p c = do
 serialRead :: Handle -> Chan Message -> IO ()
 serialRead h c = forever $ do
   l <- hGetLine h
-  case l of
-    ""   -> return ()
+  case (filter (/='\r') l) of
+    ""   -> do
+      infoM lcom $ "Serial(serialRead): got 'alive' signal" 
+      return ()
     a    -> writeChan c $ Serial a

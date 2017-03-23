@@ -1,4 +1,15 @@
-module CThread --client part, connecting somewere
+{-|
+Module      : CThread
+Description : Client thread
+Copyright   : (c) telegatrollej@yandex.ru, 2017
+License     : BSD
+Maintainer  : telegatrollej@yandex
+Stability   : experimental
+Portability : POSIX
+
+Client part, connecting to anviz biostation.
+-}
+module CThread
 (cThread,
 ) where
     
@@ -13,7 +24,7 @@ import            System.Log.Logger
 
 import            Lib                               (Message(..), lcom)
 
-reqRecInf = B.pack [0xa5,0x00,0xf6,0x46,0xeb,0x3c,0x00,0x00,0x8e,0xe3]
+reqRecInf = B.pack [0xa5,0x00,0x00,0x00,0x02,0x30,0x00,0x00,0x27,0x29]
 cBaseTimeout = 10
 
 cThread :: [Char] -> [Char] -> Chan Message -> IO ()
@@ -46,7 +57,7 @@ cRead connectionSocket chan t tmsend tmreceave = do
       writeChan chan $ Responce a
       oneShotRestart tmsend
       oneShotRestart tmreceave
-      debugM lcom $ "Client(cRead): got " ++ (show a)
+      debugM lcom $ "Client(cRead): got " ++ (show $ B.unpack a)
       cRead connectionSocket chan t tmsend tmreceave
 
 cReadChan :: Chan Message -> Socket -> IO ()
@@ -61,8 +72,9 @@ cReadChan chan connectionSocket = do
 
 cStartWaitResp :: ThreadId -> Socket -> IO()
 cStartWaitResp t connectionSocket = do
-  noticeM lcom "Client(cBody): last request was too long ago. Sending 'Get record information'"
+  noticeM lcom "Client(cBody): last request was too long ago. Sending 'Get the information of T&A device 1'"
   send connectionSocket reqRecInf
+  --Get record information: 0xa5,0x00,0xf6,0x46,0xeb,0x3c,0x00,0x00,0x8e,0xe3
   --Data: a5000000023000002729 - Get the information of T&A device 1
   --Resp: a5:00:f6:46:eb:b0:00:00:12:30:35:2e:31:38:2e:41:31:6f:43:2f:0a:00:02:10:00:00:02:1d:aa
 

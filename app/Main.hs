@@ -8,9 +8,8 @@ import              Data.Yaml
 import              Control.Applicative
 import              System.Log.Logger
 import              System.Log.Handler.Simple
-import              System.Log.Handler (setFormatter)
+import              System.Log.Handler          (setFormatter)
 import              System.Log.Formatter
---import              System.IO
 
 import              Lib                         (Message(..)
                                                 ,Config(..)
@@ -55,7 +54,7 @@ main = do
   updateGlobalLogger lcom $ addHandler fh'
   updateGlobalLogger lcom (setLevel ll)
   
-  warningM lcom $ "-----------------------------------------------------------------------------------"
+  warningM lcom $ "---------------------------------------------------------------------------"
   noticeM lcom $ "Host: "++h
   noticeM lcom $ "DPort: "++dp
   noticeM lcom $ "SPort: "++sp
@@ -113,4 +112,4 @@ printHelp pn = do
 readMyConfig :: String -> IO Config
 readMyConfig path =
   either (error . show) id <$>
-  decodeFileEither path--"./src/config.yaml"
+  decodeFileEither path
