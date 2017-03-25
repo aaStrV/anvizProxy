@@ -1,4 +1,4 @@
-module Main where
+--module Main where
 
 import              System.Environment
 import              Control.Concurrent
@@ -53,7 +53,7 @@ main = do
   removeAllHandlers
   updateGlobalLogger lcom $ addHandler fh'
   updateGlobalLogger lcom (setLevel ll)
-  
+
   warningM lcom $ "---------------------------------------------------------------------------"
   noticeM lcom $ "Host: "++h
   noticeM lcom $ "DPort: "++dp
@@ -62,7 +62,7 @@ main = do
   noticeM lcom $ "Serial port: "++com
   noticeM lcom $ "Anviz user id's: " ++ (show uss)
   noticeM lcom $ "Serial user id's: " ++ (show suss)
-  
+
   chan <- newChan
   if startAnviz
     then do
@@ -103,7 +103,8 @@ checkArgs = do
   if length args /= 1
     then do
       printHelp progName
-      die "Wrong number of arguments"
+      putStrLn "Wrong number of arguments"
+      exitFailure
     else return ()
 
 printHelp pn = do

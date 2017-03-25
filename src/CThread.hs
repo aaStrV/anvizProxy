@@ -12,7 +12,7 @@ Client part, connecting to anviz biostation.
 module CThread
 (cThread,
 ) where
-    
+
 import            Control.Concurrent
 import            Control.Concurrent.Chan
 import            Network.Simple.TCP
