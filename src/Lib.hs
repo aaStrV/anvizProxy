@@ -110,4 +110,4 @@ instance FromJSON Priority where
     "CRITICAL"  -> pure CRITICAL
     "ALERT"     -> pure ALERT
     "EMERGENCY" -> pure EMERGENCY
-    _           -> fail ("wrong loglevel: " ++ show s)
+    _           -> fail ("wrong loglevel: " ++ show s ++ ". Must be one of: DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY")

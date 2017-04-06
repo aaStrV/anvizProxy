@@ -47,7 +47,6 @@ main = do
     lp = logger_path $ logger c
     ll = logger_level $ logger c
     lf = logger_format $ logger c
-
   fh <- fileHandler lp DEBUG
   let fh' = setCommonFormatter fh lf
   removeAllHandlers
@@ -64,47 +63,36 @@ main = do
   noticeM lcom $ "Serial user id's: " ++ (show suss)
 
   chan <- newChan
+
   if startAnviz
-    then do
-      _ <- forkIO $ cThread h dp chan
-      noticeM lcom $ "Main: anviz client started"
-      return ()
-    else do
-      return ()
+    then do forkIO $ cThread h dp chan
+            noticeM lcom $ "Main: anviz client started"
+    else do return ()
   if startServer
-    then do
-      _ <- forkIO $ sThread sp chan
-      noticeM lcom $ "Main: server started"
-      return ()
-    else do
-      return ()
+    then do forkIO $ sThread sp chan
+            noticeM lcom $ "Main: server started"
+    else do return ()
   if startSerial
-    then do
-      _ <- forkIO $ serialThread com chan
-      noticeM lcom $ "Main: serial started"
-      return ()
-    else do
-      return ()
+    then do forkIO $ serialThread com chan
+            noticeM lcom $ "Main: serial started"
+    else do return ()
   if not (startAnviz || startServer || startSerial)
-    then do
-      noticeM lcom "Main: Nothing to do, check config"
-    else do
-      mThread chan uss suss prun
+    then do noticeM lcom "Main: Nothing to do, check config"
+    else do mThread chan uss suss prun
+
   noticeM lcom "Main: something goes wrong. Bye-bye"
 
 checkArgs = do
   progName <- getProgName
   args <- getArgs
   if "--help" `elem` args
-    then do
-      printHelp progName
-      exitSuccess
+    then do printHelp progName
+            exitSuccess
     else return ()
   if length args /= 1
-    then do
-      printHelp progName
-      putStrLn "Wrong number of arguments"
-      exitFailure
+    then do printHelp progName
+            putStrLn "Wrong number of arguments"
+            exitFailure
     else return ()
 
 printHelp pn = do
