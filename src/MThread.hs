@@ -24,26 +24,26 @@ import           Lib                     (Message (..), lcom)
 
 mThread :: Chan Message -> [[Word8]] -> [String] -> String -> IO ()
 mThread chan uss suss p = forever $ do
-  msg <- readChan chan
-  case msg of
-    Request message     ->
-      infoM lcom $ "Middle(mBoby): Request " ++ show (B.unpack message)
-    Responce message    -> do
-      let m = B.unpack message
-      infoM lcom $ "Middle(mBoby): Responce " ++ show (B.unpack message)
-      when (analizeResp m uss) $ do
-        alertM lcom $ "Middle(mBoby): Alarm! " ++ show m
-        runExt p
-    Serial message      -> do
-      infoM lcom $ "Middle(mBoby): Serial " ++ show message
-      when (analizeSerial suss message) $ do
-        alertM lcom $ "Middle(mBoby): Alarm!" ++ show message
-        runExt p
+    msg <- readChan chan
+    case msg of
+        Request message     ->
+            infoM lcom $ "Middle(mBoby): Request " ++ show (B.unpack message)
+        Responce message    -> do
+            let m = B.unpack message
+            infoM lcom $ "Middle(mBoby): Responce " ++ show m
+            when (analizeResp m uss) $ do
+                alertM lcom $ "Middle(mBoby): Alarm! " ++ show m
+                runExt p
+        Serial message      -> do
+            infoM lcom $ "Middle(mBoby): Serial " ++ show message
+            when (analizeSerial suss message) $ do
+                alertM lcom $ "Middle(mBoby): Alarm!" ++ show message
+                runExt p
 
 runExt :: String -> IO ()
 runExt p = do
-  _ <- createProcess (shell p)
-  return ()
+    _ <- createProcess (shell p)
+    return ()
 
 --------------------------------------------------------------------------------
 --Pure part
