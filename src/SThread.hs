@@ -2,13 +2,13 @@ module SThread --server part, reads from clients or CThread, writes opposite
 ( sThread
 ) where
 
-import            Control.Concurrent
-import            Control.Concurrent.Chan
-import qualified  Data.ByteString         as B
-import            Network.Simple.TCP
-import            System.Log.Logger
+import           Control.Concurrent
+import           Control.Concurrent.Chan
+import qualified Data.ByteString         as B
+import           Network.Simple.TCP
+import           System.Log.Logger
 
-import            Lib                     (Message(..), lcom)
+import           Lib                     (Message (..), lcom)
 
 sThread sp chan = serve (HostAny) sp $ \(connectionSocket, remoteAddr) -> do
   noticeM lcom $ "Server(sThread): TCP connection established from " ++ (show remoteAddr)

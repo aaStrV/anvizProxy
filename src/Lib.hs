@@ -9,11 +9,11 @@ module              Lib                     ( Message(..)
                                             , lcom
                                             ) where
 
-import              Data.ByteString         as B
-import              Data.Yaml
-import              Control.Applicative
-import              GHC.Word
-import              System.Log.Logger
+import           Control.Applicative
+import           Data.ByteString     as B
+import           Data.Yaml
+import           GHC.Word
+import           System.Log.Logger
 
 lcom = "Logger.Main"
 
@@ -21,11 +21,11 @@ data Message = Request ByteString
              | Responce ByteString
              | Serial String
 
-data Config = Config    { anviz :: AnvizConfig
-                        , serial :: SerialConfig
-                        , server :: ServerConfig
+data Config = Config    { anviz   :: AnvizConfig
+                        , serial  :: SerialConfig
+                        , server  :: ServerConfig
                         , actions :: ActionsConfig
-                        , logger :: LoggerConfig
+                        , logger  :: LoggerConfig
                         } deriving Show
 
 instance FromJSON Config where
@@ -35,12 +35,12 @@ instance FromJSON Config where
     m .: "server" <*>
     m .: "actions" <*>
     m .: "logger"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 data AnvizConfig = AnvizConfig {
-  anviz_ip ::     String,
-  anviz_port ::   String,
-  anviz_users ::  [[Word8]],
+  anviz_ip     :: String,
+  anviz_port   :: String,
+  anviz_users  :: [[Word8]],
   anviz_enable :: Bool
 } deriving Show
 
@@ -50,7 +50,7 @@ instance FromJSON AnvizConfig where
     m .: "anviz_port" <*>
     m .: "anviz_users" <*>
     m .: "anviz_enable"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 data SerialConfig = SerialConfig {
   serial_port   :: String,
@@ -63,7 +63,7 @@ instance FromJSON SerialConfig where
     m .: "serial_port" <*>
     m .: "serial_users" <*>
     m .: "serial_enable"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 data ServerConfig = ServerConfig {
   server_eth    :: String,
@@ -76,7 +76,7 @@ instance FromJSON ServerConfig where
     m .: "server_eth" <*>
     m .: "server_port" <*>
     m .: "server_enable"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 data ActionsConfig = ActionsConfig {
   run :: String
@@ -85,12 +85,12 @@ data ActionsConfig = ActionsConfig {
 instance FromJSON ActionsConfig where
   parseJSON (Object m) = ActionsConfig <$>
     m .: "run"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 data LoggerConfig = LoggerConfig {
   logger_path   :: String,
   logger_level  :: Priority,
-  logger_format  :: String
+  logger_format :: String
 } deriving Show
 
 instance FromJSON LoggerConfig where
@@ -98,7 +98,7 @@ instance FromJSON LoggerConfig where
     m .: "logger_path" <*>
     m .: "logger_level" <*>
     m .: "logger_format"
-  parseJSON x = fail ("not an object: " ++ show x) 
+  parseJSON x = fail ("not an object: " ++ show x)
 
 instance FromJSON Priority where
   parseJSON s = case s of

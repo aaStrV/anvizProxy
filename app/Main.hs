@@ -1,28 +1,25 @@
 --module Main where
 
-import              System.Environment
-import              Control.Concurrent
-import              Control.Concurrent.Chan
-import              System.Exit
-import              Data.Yaml
-import              Control.Applicative
-import              System.Log.Logger
-import              System.Log.Handler.Simple
-import              System.Log.Handler          (setFormatter)
-import              System.Log.Formatter
+import           Control.Applicative
+import           Control.Concurrent
+import           Control.Concurrent.Chan
+import           Data.Yaml
+import           System.Environment
+import           System.Exit
+import           System.Log.Formatter
+import           System.Log.Handler        (setFormatter)
+import           System.Log.Handler.Simple
+import           System.Log.Logger
 
-import              Lib                         (Message(..)
-                                                ,Config(..)
-                                                ,AnvizConfig(..)
-                                                ,SerialConfig(..)
-                                                ,ServerConfig(..)
-                                                ,ActionsConfig(..)
-                                                ,LoggerConfig(..)
-                                                ,lcom)
-import              CThread
-import              MThread
-import              SThread
-import              SerialThread
+import           CThread
+import           Lib                       (ActionsConfig (..),
+                                            AnvizConfig (..), Config (..),
+                                            LoggerConfig (..), Message (..),
+                                            SerialConfig (..),
+                                            ServerConfig (..), lcom)
+import           MThread
+import           SerialThread
+import           SThread
 
 setCommonFormatter x form =
   let f = simpleLogFormatter form in

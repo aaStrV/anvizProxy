@@ -9,18 +9,18 @@ Portability : POSIX
 
 Middle part, analizing messages and traffic.
 -}
-module MThread 
+module MThread
 ( mThread
 ) where
 
-import            Control.Concurrent.Chan
-import qualified  Data.ByteString         as B
-import            Control.Monad
-import            System.Process
-import            GHC.Word
-import            System.Log.Logger
+import           Control.Concurrent.Chan
+import           Control.Monad
+import qualified Data.ByteString         as B
+import           GHC.Word
+import           System.Log.Logger
+import           System.Process
 
-import            Lib                     (Message(..), lcom)
+import           Lib                     (Message (..), lcom)
 
 mThread chan uss suss p = do
   forever $ do
@@ -53,10 +53,10 @@ runExt p = do
 --Pure part
 --------------------------------------------------------------------------------
 analizeResp :: [Word8] -> [[Word8]] -> Bool
-analizeResp [] _ = False
-analizeResp _ [] = False
+analizeResp [] _                                      = False
+analizeResp _ []                                      = False
 analizeResp (0xa5:_:_:_:_:0xdf:0x00:0x00:0x0e:xs) uss = take 5 xs `elem` uss
-analizeResp _ _ = False
+analizeResp _ _                                       = False
 
 analizeSerial :: [String] -> String -> Bool
 analizeSerial _ "" = False

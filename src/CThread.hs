@@ -13,16 +13,16 @@ module CThread
 (cThread,
 ) where
 
-import            Control.Concurrent
-import            Control.Concurrent.Chan
-import            Network.Simple.TCP
-import qualified  Data.ByteString                   as B
-import            Control.Exception
-import            Control.Concurrent.Timer
-import            Control.Concurrent.Suspend.Lifted
-import            System.Log.Logger
+import           Control.Concurrent
+import           Control.Concurrent.Chan
+import           Control.Concurrent.Suspend.Lifted
+import           Control.Concurrent.Timer
+import           Control.Exception
+import qualified Data.ByteString                   as B
+import           Network.Simple.TCP
+import           System.Log.Logger
 
-import            Lib                               (Message(..), lcom)
+import           Lib                               (Message (..), lcom)
 
 reqRecInf = B.pack [0xa5,0x00,0x00,0x00,0x02,0x30,0x00,0x00,0x27,0x29]
 cBaseTimeout = 10
