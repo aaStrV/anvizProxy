@@ -27,15 +27,15 @@ import           Lib                               (Message (..), lcom)
 reqRecInf = B.pack [0xa5,0x00,0x00,0x00,0x02,0x30,0x00,0x00,0x27,0x29]
 cBaseTimeout = 10
 
-cThread :: [Char] -> [Char] -> Chan Message -> IO ()
-cThread  h dp chan = do
+cThread :: String -> String -> Chan Message -> IO ()
+cThread  h dp chan =
   cBody  h dp chan `finally` do
     warningM lcom "Client(cThread): connection done or lost or not established"
     threadDelay 3000000
     cThread h dp chan
 
-cBody :: [Char] -> [Char] -> Chan Message -> IO ()
-cBody h dp chan = do
+cBody :: String -> String -> Chan Message -> IO ()
+cBody h dp chan =
   connect h dp $ \(connectionSocket, remoteAddr) -> do
     warningM lcom $ "Client(cBody): connection established to " ++ show remoteAddr
     t <- forkIO $ do
@@ -47,17 +47,18 @@ cBody h dp chan = do
     oneShotStart tmreceave (cDisconnect t connectionSocket) $ sDelay $ cBaseTimeout+1
     cRead connectionSocket chan t tmsend tmreceave
 
+cRead :: Socket -> Chan Message -> ThreadId -> TimerIO -> TimerIO -> IO ()
 cRead connectionSocket chan t tmsend tmreceave = do
   m <- recv connectionSocket 410
   case m of
     Nothing    -> do
-      debugM lcom $ "Client(cRead): got Nothing packet"
+      debugM lcom "Client(cRead): got Nothing packet"
       killThread t
     Just a     -> do
       writeChan chan $ Responce a
       oneShotRestart tmsend
       oneShotRestart tmreceave
-      debugM lcom $ "Client(cRead): got " ++ (show $ B.unpack a)
+      debugM lcom $ "Client(cRead): got " ++ show (B.unpack a)
       cRead connectionSocket chan t tmsend tmreceave
 
 cReadChan :: Chan Message -> Socket -> IO ()
@@ -66,7 +67,7 @@ cReadChan chan connectionSocket = do
   case m of
     Request a -> do
       send connectionSocket a
-      debugM lcom $ "Client(cReadChan): " ++ (show a)
+      debugM lcom $ "Client(cReadChan): " ++ show a
     _           -> return ()
   cReadChan chan connectionSocket
 

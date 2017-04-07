@@ -15,23 +15,21 @@ import           System.Log.Logger
 import           Lib                        (Message (..), lcom)
 
 serialThread :: String -> Chan Message -> IO ()
-serialThread p c = do
+serialThread p c =
   if p==""
-    then do
-      warningM lcom $ "Serial(serialThread): empty port, serial thread done"
-    else do
-      serialConNow p c
+    then warningM lcom "Serial(serialThread): empty port, serial thread done"
+    else serialConNow p c
 
-serialConNow p c = do
-  serialConnect p c `catch` (\e -> do
+serialConNow p c =
+  serialConnect p c `catch` (\e ->
     if isEOFError e
       then do
-        noticeM lcom $ "Serial(serialConnect): got EOFError, reconnecting now"
+        noticeM lcom "Serial(serialConnect): got EOFError, reconnecting now"
         serialConNow p c
       else do
-        noticeM lcom $ "Serial(serialConnect): got some exception, will reconnect after timeout"
+        noticeM lcom "Serial(serialConnect): got some exception, will reconnect after timeout"
         threadDelay 5000000
-        noticeM lcom $ "Serial(serialConnect): reconnecting"
+        noticeM lcom "Serial(serialConnect): reconnecting"
         serialConNow p c )
 
 serialConnect p c = do
@@ -43,8 +41,8 @@ serialConnect p c = do
 serialRead :: Handle -> Chan Message -> IO ()
 serialRead h c = forever $ do
   l <- hGetLine h
-  case (filter (/='\r') l) of
+  case filter (/='\r') l of
     ""   -> do
-      infoM lcom $ "Serial(serialRead): got 'alive' signal"
+      infoM lcom "Serial(serialRead): got 'alive' signal"
       return ()
     a    -> writeChan c $ Serial a

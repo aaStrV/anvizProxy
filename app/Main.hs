@@ -3,6 +3,7 @@
 import           Control.Applicative
 import           Control.Concurrent
 import           Control.Concurrent.Chan
+import           Control.Monad
 import           Data.Yaml
 import           System.Environment
 import           System.Exit
@@ -49,50 +50,44 @@ main = do
   removeAllHandlers
   updateGlobalLogger lcom $ addHandler fh'
   updateGlobalLogger lcom (setLevel ll)
-
-  warningM lcom $ "---------------------------------------------------------------------------"
+  warningM lcom
+    "------------------------------------------------------------------------"
   noticeM lcom $ "Host: "++h
   noticeM lcom $ "DPort: "++dp
   noticeM lcom $ "SPort: "++sp
   noticeM lcom $ "Run script: "++prun
   noticeM lcom $ "Serial port: "++com
-  noticeM lcom $ "Anviz user id's: " ++ (show uss)
-  noticeM lcom $ "Serial user id's: " ++ (show suss)
-
+  noticeM lcom $ "Anviz user id's: " ++ show uss
+  noticeM lcom $ "Serial user id's: " ++ show suss
   chan <- newChan
-
-  if startAnviz
-    then do forkIO $ cThread h dp chan
-            noticeM lcom $ "Main: anviz client started"
-    else do return ()
-  if startServer
-    then do forkIO $ sThread sp chan
-            noticeM lcom $ "Main: server started"
-    else do return ()
-  if startSerial
-    then do forkIO $ serialThread com chan
-            noticeM lcom $ "Main: serial started"
-    else do return ()
+  when startAnviz $ do
+    forkIO $ cThread h dp chan
+    noticeM lcom "Main: anviz client started"
+  when startServer $ do
+    forkIO $ sThread sp chan
+    noticeM lcom "Main: server started"
+  when startSerial $ do
+      forkIO $ serialThread com chan
+      noticeM lcom "Main: serial started"
   if not (startAnviz || startServer || startSerial)
-    then do noticeM lcom "Main: Nothing to do, check config"
-    else do mThread chan uss suss prun
-
+    then noticeM lcom "Main: Nothing to do, check config"
+    else mThread chan uss suss prun
   noticeM lcom "Main: something goes wrong. Bye-bye"
 
+checkArgs :: IO ()
 checkArgs = do
   progName <- getProgName
   args <- getArgs
-  if "--help" `elem` args
-    then do printHelp progName
-            exitSuccess
-    else return ()
-  if length args /= 1
-    then do printHelp progName
-            putStrLn "Wrong number of arguments"
-            exitFailure
-    else return ()
+  when ("--help" `elem` args) $ do
+    printHelp progName
+    exitSuccess
+  when (length args /= 1) $ do
+    printHelp progName
+    putStrLn "Wrong number of arguments"
+    exitFailure
 
-printHelp pn = do
+printHelp :: String -> IO ()
+printHelp pn =
   putStrLn $ "Usage:    "++pn++" <path to config.yaml>"
 
 readMyConfig :: String -> IO Config

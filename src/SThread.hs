@@ -10,8 +10,8 @@ import           System.Log.Logger
 
 import           Lib                     (Message (..), lcom)
 
-sThread sp chan = serve (HostAny) sp $ \(connectionSocket, remoteAddr) -> do
-  noticeM lcom $ "Server(sThread): TCP connection established from " ++ (show remoteAddr)
+sThread sp chan = serve HostAny sp $ \(connectionSocket, remoteAddr) -> do
+  noticeM lcom $ "Server(sThread): TCP connection established from " ++ show remoteAddr
   t <- forkIO $ do
     c <- dupChan chan
     sReadChan c connectionSocket
@@ -21,7 +21,7 @@ sRead connectionSocket chan t = do
   a <- recv connectionSocket 410
   case a of
     Nothing    -> do
-      warningM lcom $ "Server(sRead): got Nothing packet"
+      warningM lcom "Server(sRead): got Nothing packet"
       killThread t
     Just a     -> do
       writeChan chan $ Request a
@@ -31,7 +31,7 @@ sReadChan chan connectionSocket = do
   m <- readChan chan
   case m of
     Responce a  -> do
-      noticeM lcom $ "Server(sReadChan): " ++ (show a)
+      noticeM lcom $ "Server(sReadChan): " ++ show a
       send connectionSocket a
     _           -> return ()
   sReadChan chan connectionSocket
