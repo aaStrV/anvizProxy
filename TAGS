@@ -1,22 +1,31 @@
 
-/home/sergius/install/local_repo/anvizProxy/test/Spec.hs,15
+./test/Spec.hs,30
 main main0,1
+main main1,2
 
-/home/sergius/install/local_repo/anvizProxy/app/Main.hs,149
+./app/Main.hs,253
 setCommonFormatter setCommonFormatter24,25
 main main28,29
+main main29,30
 checkArgs checkArgs76,77
+checkArgs checkArgs77,78
 printHelp printHelp88,89
+printHelp printHelp89,90
 readMyConfig readMyConfig92,93
+readMyConfig readMyConfig93,94
 
-/home/sergius/install/local_repo/anvizProxy/src/MThread.hs,139
+./src/MThread.hs,249
 module MThreadMThread11,12
 mThread mThread24,25
+mThread mThread25,26
 runExt runExt42,43
+runExt runExt43,44
 analizeResp analizeResp50,51
+analizeResp analizeResp51,52
 analizeSerial analizeSerial56,57
+analizeSerial analizeSerial57,58
 
-/home/sergius/install/local_repo/anvizProxy/src/Lib.hs,1150
+./src/Lib.hs,1450
 module              Lib Lib1,2
 lcom lcom17,18
 data Message Message19,20
@@ -24,6 +33,7 @@ data Message = Request Request19,20
              | Responce Responce20,21
              | Serial Serial21,22
 data Config Config23,24
+data Config = Config Config23,24
 data Config = Config    { anviz anviz23,24
                         , serial serial24,25
                         , server server25,26
@@ -31,52 +41,65 @@ data Config = Config    { anviz anviz23,24
                         , logger logger27,28
 instance instance30,31
 data AnvizConfig AnvizConfig39,40
+data AnvizConfig = AnvizConfig AnvizConfig39,40
     anviz_ip anviz_ip40,41
     anviz_port anviz_port41,42
     anviz_users anviz_users42,43
     anviz_enable anviz_enable43,44
 data SerialConfig SerialConfig54,55
+data SerialConfig = SerialConfig SerialConfig54,55
     serial_port serial_port55,56
     serial_users serial_users56,57
     serial_enable serial_enable57,58
 data ServerConfig ServerConfig67,68
+data ServerConfig = ServerConfig ServerConfig67,68
     server_eth server_eth68,69
     server_port server_port69,70
     server_enable server_enable70,71
 data ActionsConfig ActionsConfig80,81
+data ActionsConfig = ActionsConfig ActionsConfig80,81
     run run81,82
 data LoggerConfig LoggerConfig89,90
+data LoggerConfig = LoggerConfig LoggerConfig89,90
     logger_path logger_path90,91
     logger_level logger_level91,92
     logger_format logger_format92,93
 
-/home/sergius/install/local_repo/anvizProxy/src/SerialThread.hs,168
+./src/SerialThread.hs,230
 module SerialThread SerialThread1,2
 serialThread serialThread16,17
+serialThread serialThread17,18
 serialConNow serialConNow22,23
 serialConnect serialConnect34,35
 serialRead serialRead40,41
+serialRead serialRead41,42
 
-/home/sergius/install/local_repo/anvizProxy/src/SThread.hs,97
+./src/SThread.hs,97
 module SThread SThread0,1
 sThread sThread12,13
 sRead sRead19,20
 sReadChan sReadChan29,30
 
-/home/sergius/install/local_repo/anvizProxy/src/CThread.hs,245
+./src/CThread.hs,401
 module CThreadCThread11,12
 reqRecInf reqRecInf26,27
 cBaseTimeout cBaseTimeout27,28
 cThread cThread29,30
+cThread cThread30,31
 cBody cBody36,37
+cBody cBody37,38
 cRead cRead49,50
+cRead cRead50,51
 cReadChan cReadChan63,64
+cReadChan cReadChan64,65
 cStartWaitResp cStartWaitResp73,74
+cStartWaitResp cStartWaitResp74,75
 cDisconnect cDisconnect81,82
+cDisconnect cDisconnect82,83
 
-/home/sergius/install/local_repo/anvizProxy/Setup.hs,15
+./Setup.hs,15
 main main1,2
 
-/home/sergius/install/local_repo/anvizProxy/test.hs,30
+./test.hs,30
 sum' sum'0,1
 main main3,4
