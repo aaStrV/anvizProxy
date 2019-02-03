@@ -1,42 +1,90 @@
-name:                anvizProxy
-version:             0.1.0.0
--- synopsis:
--- description:
-homepage:            https://github.com/githubuser/anvizProxy#readme
-license:             BSD3
-license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2017 Author name here
-category:            Web
-build-type:          Simple
-extra-source-files:  README.md
-cabal-version:       >=1.10
+cabal-version: 1.12
 
-library
-  hs-source-dirs:      src
-  exposed-modules:     Lib, CThread, MThread, SThread, SerialThread
-  build-depends:       base >= 4.7 && < 5, bytestring >= 0.10, network-simple >= 0.4, network >= 2.6, timers >= 0.2, suspend >= 0.2, process, yaml, serialport, hslogger
-  default-language:    Haskell2010
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 12106ed75837830ef970c7236508e07778f1bb689823e8a4a99d21c58d8ecb4b
 
-executable anvizProxy
-  hs-source-dirs:      app
-  main-is:             Main.hs
-  --ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N -debug -fllvm -keep-llvm-files
-  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N -debug
-  build-depends:       base
-                     , anvizProxy, bytestring, network-simple, network, yaml, hslogger
-  default-language:    Haskell2010
-
-test-suite anvizProxy-test
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-  main-is:             Spec.hs
-  build-depends:       base
-                     , anvizProxy, bytestring, network-simple, network, yaml
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  default-language:    Haskell2010
+name:           anvizProxy
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/anvizProxy#readme>
+homepage:       https://github.com/githubuser/anvizProxy#readme
+bug-reports:    https://github.com/githubuser/anvizProxy/issues
+author:         sergius
+maintainer:     telegatrollej@yandex.ru
+copyright:      2019 sergius
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
 
 source-repository head
-  type:     git
+  type: git
   location: https://github.com/githubuser/anvizProxy
+
+library
+  exposed-modules:
+      CThread
+      Lib
+      MThread
+      SerialThread
+      SThread
+  other-modules:
+      Paths_anvizProxy
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , hslogger
+    , network-simple
+    , process
+    , serialport
+    , suspend
+    , timers >=0.2
+    , yaml
+  default-language: Haskell2010
+
+executable anviz-proxy-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_anvizProxy
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      anvizProxy
+    , base >=4.7 && <5
+    , bytestring
+    , hslogger
+    , network-simple
+    , process
+    , serialport
+    , suspend
+    , timers >=0.2
+    , yaml
+  default-language: Haskell2010
+
+test-suite anviz-proxy-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_anvizProxy
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      anvizProxy
+    , base >=4.7 && <5
+    , bytestring
+    , hslogger
+    , network-simple
+    , process
+    , serialport
+    , suspend
+    , timers >=0.2
+    , yaml
+  default-language: Haskell2010

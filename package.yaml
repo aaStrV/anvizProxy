@@ -1,0 +1,56 @@
+name:                anvizProxy
+version:             0.1.0.0
+github:              "githubuser/anvizProxy"
+license:             BSD3
+author:              "sergius"
+maintainer:          "telegatrollej@yandex.ru"
+copyright:           "2019 sergius"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/anvizProxy#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- yaml
+- hslogger
+- process
+- timers >= 0.2
+- suspend
+- network-simple
+- serialport
+
+library:
+  source-dirs: src
+
+executables:
+  anviz-proxy-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - anvizProxy
+
+tests:
+  anviz-proxy-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - anvizProxy
